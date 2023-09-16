@@ -1,6 +1,8 @@
-# Flipper Android App [![Flipper App Status](https://github.com/flipperdevices/Flipper-Android-App/actions/workflows/internal.yml/badge.svg)](https://github.com/Flipper-Zero/Flipper-Android-App/releases) [![Discord](https://img.shields.io/discord/740930220399525928.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](http://flipperzero.one/discord)
+# Unofficial Flipper Android App
 
-Unofficial Mobile app to rule all Flipper's family
+Unofficial Mobile app to rule all Flipper's family  
+Includes Unleashed Update server... That's it for the moment.  
+
 
 ## Module arch
 
