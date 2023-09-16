@@ -2,9 +2,6 @@
 
 Unofficial Mobile app to rule all Flipper's family
 
-![dolphin-dark](.github/dark_theme_banner.png#gh-dark-mode-only)
-![dolphin-light](.github/light_theme_banner.png#gh-light-mode-only)
-
 ## Module arch
 
 ```
