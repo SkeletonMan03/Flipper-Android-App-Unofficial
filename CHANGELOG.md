@@ -2,13 +2,31 @@
 
 # 1.6.5 - In progress
 
+- [Feature] Flipper Busy Dialog with remote
+- [Feature] Infrared Editor
 - [Feature] Scroll on Infrared Screen
+- [Feature] Redesign for FapHub
 - [Feature] Check Self Update App in Options (only for github)
 - [Feature] Fap Catalog save sort
-- [Feature] Check Self Update App in Optiond (only for github)
+- [Feature] Add metrics for faphub
+- [Feature] Add dialog about failed BLE HID connection
+- [Feature] Add countly sessions 
 - [FIX] Use by default dark theme in Wear OS
 - [FIX] Use default splashscreen in Wear OS
 - [FIX] Fix compose layout in Wear OS
+- [FIX] Fix wearos font issue
+- [FIX] New mechanism emulate in Wear OS
+- [FIX] New button texts on fap errors dialog
+- [FIX] Scroll progress on wear OS app
+- [FIX] Bold Text in github link and app action
+- [FIX] Remove Control from Options
+- [FIX] Deprecated detekt rules
+- [FIX] Fix apostrophe in text "What’s New"
+- [FIX] Installed tab "need to update" count
+- [FIX] Fap app icon size in large app card
+- [FIX] Openning animation
+- [FIX] Swipe refresh modifier use in root level
+- [FIX] Fix overflow in key small
 
 # 1.6.4 
 

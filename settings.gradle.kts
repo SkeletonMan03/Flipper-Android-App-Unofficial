@@ -85,6 +85,7 @@ include(
 
     ":components:screenstreaming:impl",
     ":components:screenstreaming:api",
+    ":components:screenstreaming:noop",
 
     ":components:share:api",
     ":components:share:receive",
@@ -126,6 +127,7 @@ include(
 
     ":components:infrared:api",
     ":components:infrared:impl",
+    ":components:infrared:editor",
 
     ":components:firstpair:api",
     ":components:firstpair:impl",
@@ -147,11 +149,8 @@ include(
     ":components:nfceditor:impl",
     ":components:nfceditor:sample",
 
-    ":components:wearable:theme",
     ":components:wearable:core:ui:components",
-    ":components:wearable:core:ui:ktx",
-    ":components:wearable:setup:api",
-    ":components:wearable:setup:impl",
+    ":components:wearable:core:ui:theme",
 
     ":components:wearable:sync:common",
     ":components:wearable:sync:wear:api",
@@ -224,5 +223,8 @@ include(
     ":components:selfupdater:unknown",
     ":components:selfupdater:debug",
     ":components:selfupdater:thirdparty:api",
-    ":components:selfupdater:thirdparty:github"
+    ":components:selfupdater:thirdparty:github",
+
+    ":components:unhandledexception:api",
+    ":components:unhandledexception:impl"
 )
