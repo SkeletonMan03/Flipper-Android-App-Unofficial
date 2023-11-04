@@ -1,7 +1,21 @@
 # Changelog
 
-# 1.6.5 - In progress
+# 1.6.7 - In progress
 
+# 1.6.6
+
+- [Feature] Bump deps
+- [Feature] Optimization FapHub by compose metrics
+- [FIX] Fix faphub minor version supported suggest to update
+- [FIX] Fix faphub manifest minor api version
+- [FIX] Fix faphub manifest image base64
+- [FIX] Fix crash on appication from unknown source
+- [FIX] Fix mfkey32 download process
+- [FIX] Fix crash gms version on nogms environment
+
+# 1.6.5
+
+- [Feature] Infrared Screen with old style
 - [Feature] Flipper Busy Dialog with remote
 - [Feature] Infrared Editor
 - [Feature] Scroll on Infrared Screen
