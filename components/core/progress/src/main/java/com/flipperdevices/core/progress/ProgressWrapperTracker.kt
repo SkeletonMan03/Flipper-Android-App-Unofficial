@@ -17,9 +17,6 @@ class ProgressWrapperTracker(
         }
 
         val currentPercent = min + current * diff
-        if (BuildConfig.DEBUG && currentPercent > max) {
-            error("Incorrect current percent (min: $min, current: $current, diff: $diff)")
-        }
 
         progressListener.onProgress(min(min(currentPercent, max), MAX_PERCENT))
     }
@@ -32,6 +29,14 @@ class ProgressWrapperTracker(
             }
             return
         }
+        if (max == 0L) {
+            onProgress(MAX_PERCENT)
+            if (BuildConfig.DEBUG) {
+                error("Max is zero")
+            }
+            return
+        }
+
         val percent = current.toDouble() / max
         onProgress(percent.toFloat())
     }

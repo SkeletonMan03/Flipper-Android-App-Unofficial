@@ -1,11 +1,69 @@
 # Changelog
 
-# 1.6.7 - In progress
+# 1.6.9 - In progress
+
+- [KMP] Migration core:test, core:ktx, core:ui:lifecycle
+- [KMP] Migration core:data
+- [KMP] Migration core:log
+- [Feature] Add ready app updates popup and notification dot
+- [Feature] Per app loading in installed tab
+- [Refactor] Migrate to markdown renderer from upstream
+- [Refactor] Basic implementation of new transport ble 
+- [FIX] Replace decompose push to move safety push
+- [FIX] Add fallback for parse url from "Open in App" URI
+- [FIX] Multiple internet connection placeholders on Hub Apps screen
+- [FIX] Find already paired Flipper devices without state filter
+- [FIX] Update flipper is busy image
+- [Feature] Add not connected, empty and syncing states to emulation button on key screen
+- [Refactor] Use https://github.com/IlyaGulya/anvil-utils to automatically generate and contribute assisted factories.
+- [Refactor] Add test for Progress Tracker logic
+
+# 1.6.8
+
+- [Refactor] Migrate file manager to decompose
+- [Refactor] Migrate options screen to decompose
+- [Refactor] Migrate device screen to decompose
+- [Refactor] Migrate hub screen to decompose
+- [Refactor] Migrate archive screen to decompose
+- [Refactor] Migrate bottombar to decompose
+- [Refactor] Migrate root screens to decompose
+- [Refactor] Add deeplink handle to decompose
+- [Refactor] Migrate wearos to decompose
+- [Refactor] Remove tangle and jetpack navigation deps
+- [Refactor] Migrate all viewmodel to DecomposeViewModel
+- [FIX] Fix crash with notification on options screen
+- [Fix] Fix status bar color
+- [Feature] Support 4 version of NFC Mifare format
+- [Feature] Button vibration in ScreenStreaming
+- [Refactor] Bump version
+- [FIX] On back button on each page
+- [FIX] Fix blinking caused on wrong stateIn used function
+- [FIX] Box size in inapp notification
+- [FIX] Crash on delete/restore key
+- [FIX] Fix lost connection in screen streaming
+- [Feature] Change notification icon
+- [FIX] Try to fix impact for connect button
+- [FIX] Atomic write/read manifest storage
+- [Refactor] Bump version with dependabot
+- [FIX] Disable edit when emulating in progress
+- [FIX] Single Activity launch mode to singleTask
+- [FIX] Bug with infinite connect state in first pair
+
+# 1.6.7
+
+- [Feature] Infrared Editor process error
+- [Feature] Optimization FapHub by compose metrics
+- [Feature] Firmware update notification
+- [FIX] Fix texts in application
+- [FIX] Splashscreen WearOS icon
+- [FIX] Handle expired link
+- [FIX] Progress wrapper division by zero
+- [FIX] No SDCard error in FapHub
 
 # 1.6.6
 
 - [Feature] Bump deps
-- [Feature] Optimization FapHub by compose metrics
+- [Feature] New Infrared Emulate Api
 - [FIX] Fix faphub minor version supported suggest to update
 - [FIX] Fix faphub manifest minor api version
 - [FIX] Fix faphub manifest image base64

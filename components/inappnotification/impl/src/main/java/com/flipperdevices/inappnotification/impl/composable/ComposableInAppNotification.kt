@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -22,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.core.ui.theme.LocalPallet
 import com.flipperdevices.inappnotification.api.model.InAppNotification
+import com.flipperdevices.inappnotification.impl.composable.type.ComposableInAppNotificationError
 import com.flipperdevices.inappnotification.impl.composable.type.ComposableInAppNotificationHideApp
+import com.flipperdevices.inappnotification.impl.composable.type.ComposableInAppNotificationReadyToUpdate
 import com.flipperdevices.inappnotification.impl.composable.type.ComposableInAppNotificationReportApp
 import com.flipperdevices.inappnotification.impl.composable.type.ComposableInAppNotificationSavedKey
 import com.flipperdevices.inappnotification.impl.composable.type.ComposableInAppNotificationSelfUpdateError
@@ -38,9 +39,11 @@ fun ComposableInAppNotification(
     onNotificationHidden: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    key(notification, onNotificationHidden, modifier) {
-        ComposableInAppNotificationCard(notification, onNotificationHidden, modifier)
-    }
+    ComposableInAppNotificationCard(
+        notification = notification,
+        onNotificationHidden = onNotificationHidden,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -54,6 +57,14 @@ private fun ComposableInAppNotificationCard(
     var actionClicked by remember { mutableStateOf(false) }
     LaunchedEffect(notification) {
         visibleState = true
+    }
+
+    val onClickAction = remember(onNotificationHidden) {
+        {
+            visibleState = false
+            actionClicked = true
+            onNotificationHidden()
+        }
     }
     AnimatedVisibility(
         modifier = modifier,
@@ -69,14 +80,10 @@ private fun ComposableInAppNotificationCard(
             backgroundColor = LocalPallet.current.notificationCard
         ) {
             when (notification) {
-                is InAppNotification.SavedKey -> ComposableInAppNotificationSavedKey(notification)
+                is InAppNotification.Successful -> ComposableInAppNotificationSavedKey(notification)
 
                 is InAppNotification.SelfUpdateReady ->
-                    ComposableInAppNotificationSelfUpdateReady(notification) {
-                        visibleState = false
-                        actionClicked = true
-                        onNotificationHidden()
-                    }
+                    ComposableInAppNotificationSelfUpdateReady(notification, onClickAction)
 
                 is InAppNotification.SelfUpdateError ->
                     ComposableInAppNotificationSelfUpdateError()
@@ -87,16 +94,21 @@ private fun ComposableInAppNotificationCard(
                 InAppNotification.ReportApp -> ComposableInAppNotificationReportApp()
                 is InAppNotification.HiddenApp -> ComposableInAppNotificationHideApp(
                     notification = notification,
-                    onClickAction = {
-                        visibleState = false
-                        actionClicked = true
-                        onNotificationHidden()
-                    }
+                    onClickAction = onClickAction
+                )
+
+                is InAppNotification.Error -> ComposableInAppNotificationError(
+                    notification,
+                    onClickAction
+                )
+
+                InAppNotification.ReadyToUpdateFaps -> ComposableInAppNotificationReadyToUpdate(
+                    onAction = onClickAction
                 )
             }
         }
     }
-    DisposableEffect(notification) {
+    DisposableEffect(notification, onNotificationHidden) {
         val handler = Handler(Looper.getMainLooper())
 
         val fadeOutRunnable = {

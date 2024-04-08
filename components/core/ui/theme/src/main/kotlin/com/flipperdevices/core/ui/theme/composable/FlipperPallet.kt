@@ -71,11 +71,17 @@ data class FlipperPallet(
     val fapHubBuildStatusFailedText: Color,
 
     val screenStreamingBorderColor: Color,
-    val screenStreamingNotConnectedColor: Color
+    val screenStreamingNotConnectedColor: Color,
+
+    val keyScreenDisabled: Color,
+
+    val placeholder: Color
 ) {
     val accent: Color = Color(0xFFFF8200)
     val accentSecond: Color = Color(0xFF589DFF)
     val onError: Color = Color(0xFFF63F3F)
+    val onErrorBorder: Color = onError.copy(alpha = 0.3f)
+    val onErrorBackground: Color = onError.copy(alpha = 0.1f)
 
     val bottomBarSelected: Color = Color(0xFF303030)
     val bottomBarSelectedFlipperStatus: Color = Color(0xFF919191)
@@ -132,7 +138,6 @@ data class FlipperPallet(
     val onAppBar: Color = Color(0xFF000000)
     val disableBackgroundSwitch: Color = Color(0xFF616161)
 
-    val placeholder: Color = Color(0xFFDFDFDF)
     val nfcCardUIDColor: Color = Color(0xFF8A2BE2)
     val nfcCardKeyAColor: Color = Color(0xFF2ED832)
     val nfcCardAccessBitsColor: Color = Color(0xFFF63F3F)
@@ -166,8 +171,6 @@ data class FlipperPallet(
     val tabSwitchActiveColor: Color = Color(0xFF000000)
     val tabSwitchInActiveColor: Color = Color(0xFF000000).copy(alpha = 0.5f)
     val tabSwitchBackgroundColor: Color = Color(0xFFFFFFFF).copy(alpha = 0.5f)
-
-    val accentShareSheetStatusBarColor = Color(0xFFD96F00)
 
     val infraredEditorDrag = Color(0xFFFFFFFF).copy(alpha = 0.5f)
     val infraredEditorKeyName = Color(0xFFFFFFFF)
