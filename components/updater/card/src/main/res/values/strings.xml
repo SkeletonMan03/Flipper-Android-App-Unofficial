@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="updater_card_updater_title">Firmware Update</string>
+    <string name="updater_card_updater_preferred_firmware">Preferred Firmware</string>
     <string name="updater_card_updater_title_whatsnew">What’s New</string>
     <string name="updater_card_updater_channel">Update Channel</string>
     <string name="updater_card_updater_error_retry">Retry</string>
@@ -16,6 +17,10 @@
     <string name="updater_card_updater_reboot_title">Update started</string>
     <string name="updater_card_updater_reboot_desc">Flipper is updating in offline mode. Check the device screen for info and wait for reconnect.</string>
     <string name="updater_card_firmware_version_choice">Choice version</string>
+
+    <string name="updater_card_updater_server_flipper">Official</string>
+    <string name="updater_card_updater_server_unleashed">Unleashed</string>
+    <string name="updater_card_updater_server_momentum">Momentum</string>
 
     <string name="update_card_error_no_internet_title">No internet connection</string>
     <string name="update_card_error_no_internet_desc">Can\'t connect to update server</string>

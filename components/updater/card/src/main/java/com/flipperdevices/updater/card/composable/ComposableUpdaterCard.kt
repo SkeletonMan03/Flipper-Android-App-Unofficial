@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.flipperdevices.core.preference.pb.UpdateRequestServer
 import com.flipperdevices.info.shared.InfoElementCard
 import com.flipperdevices.updater.card.R
 import com.flipperdevices.updater.card.composable.dialogs.ComposableFailedUpdate
@@ -49,9 +50,12 @@ internal fun ComposableUpdaterCardInternal(
     }
 
     val cardState by updateCardViewModel.getUpdateCardState().collectAsState()
+    val settings by updateCardViewModel.getSettings().collectAsState()
     ComposableUpdaterCard(
         modifier = modifier,
         cardStateLocal = cardState,
+        selectedServer = settings.update_request_server,
+        onSelectServer = updateCardViewModel::onSelectServer,
         onSelectChannel = updateCardViewModel::onSelectChannel,
         retryUpdate = updateCardViewModel::refresh,
         onStartUpdateRequest = onStartUpdateRequest,
@@ -63,7 +67,9 @@ internal fun ComposableUpdaterCardInternal(
 private fun ComposableUpdaterCard(
     updateRequestViewModel: UpdateRequestViewModel,
     cardStateLocal: UpdateCardState,
+    selectedServer: UpdateRequestServer,
     modifier: Modifier = Modifier,
+    onSelectServer: (UpdateRequestServer) -> Unit = {},
     onSelectChannel: (FirmwareChannel) -> Unit = {},
     onStartUpdateRequest: (UpdateRequest) -> Unit = {},
     retryUpdate: () -> Unit = {}
@@ -86,34 +92,41 @@ private fun ComposableUpdaterCard(
             UpdateCardState.InProgress -> ComposableFirmwareUpdaterContent(
                 version = null,
                 updateCardState = cardStateLocal,
+                onSelectServer = onSelectServer,
                 onSelectFirmwareChannel = onSelectChannel,
                 onStartUpdateRequest = onStartUpdateRequest,
-                updateRequestViewModel = updateRequestViewModel
-
+                updateRequestViewModel = updateRequestViewModel,
+                selectedServer = selectedServer
             )
 
             is UpdateCardState.NoUpdate -> ComposableFirmwareUpdaterContent(
                 version = cardStateLocal.flipperVersion,
                 updateCardState = cardStateLocal,
+                onSelectServer = onSelectServer,
                 onSelectFirmwareChannel = onSelectChannel,
                 onStartUpdateRequest = onStartUpdateRequest,
-                updateRequestViewModel = updateRequestViewModel
+                updateRequestViewModel = updateRequestViewModel,
+                selectedServer = selectedServer
             )
 
             is UpdateCardState.UpdateAvailable -> ComposableFirmwareUpdaterContent(
                 version = cardStateLocal.update.updateTo,
                 updateCardState = cardStateLocal,
+                onSelectServer = onSelectServer,
                 onSelectFirmwareChannel = onSelectChannel,
                 onStartUpdateRequest = onStartUpdateRequest,
-                updateRequestViewModel = updateRequestViewModel
+                updateRequestViewModel = updateRequestViewModel,
+                selectedServer = selectedServer
             )
 
             is UpdateCardState.UpdateFromFile -> ComposableFirmwareUpdaterContent(
                 version = cardStateLocal.updateVersion,
                 updateCardState = cardStateLocal,
+                onSelectServer = onSelectServer,
                 onSelectFirmwareChannel = onSelectChannel,
                 onStartUpdateRequest = onStartUpdateRequest,
-                updateRequestViewModel = updateRequestViewModel
+                updateRequestViewModel = updateRequestViewModel,
+                selectedServer = selectedServer
             )
         }
     }

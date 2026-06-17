@@ -3,7 +3,6 @@ package com.flipperdevices.settings.impl.model
 sealed interface DebugSettingSwitch {
     data object IgnoreSupportedVersion : DebugSettingSwitch
     data object IgnoreUpdaterVersion : DebugSettingSwitch
-    data object SkipProvisioning : DebugSettingSwitch
     data object SkipAutoSync : DebugSettingSwitch
     data object FapHubDev : DebugSettingSwitch
     data object SelfUpdaterDebug : DebugSettingSwitch

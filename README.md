@@ -1,19 +1,22 @@
-# Flipper Android App [![Flipper App Status](https://github.com/flipperdevices/Flipper-Android-App/actions/workflows/internal.yml/badge.svg)](https://github.com/Flipper-Zero/Flipper-Android-App/releases) [![Discord](https://img.shields.io/discord/740930220399525928.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](http://flipperzero.one/discord)
+# Unofficial Flipper Android App
 
 Mobile app to rule all Flipper's family
+What the Flipper mobile app should have been.
 
-![dolphin-dark](.github/dark_theme_banner.png#gh-dark-mode-only)
-![dolphin-light](.github/light_theme_banner.png#gh-light-mode-only)
+# What's Changed
+
+* You can now select your preferred firmware to use the appropriate update server instead, available selections are presently:
+* [Official](https://github.com/flipperdevices/flipperzero-firmware)
+* [Unleashed](https://github.com/DarkFlippers/unleashed-firmware)
+* [Momentum](https://github.com/Next-Flip/Momentum-Firmware)
+* Telemetry has been removed
+* Region-free - The subghz update stuff depending for region has been removed
+
 
 ## Download
 
+You'll have to compile it yourself for now. At the very least, assets need to be changed and the app has to be refactored to have a different package name before making public builds.
 
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
-     alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=com.flipperdevices.app)
-[<img height="80" alt='Get it on F-Droid' src='https://fdroid.gitlab.io/artwork/badge/get-it-on.png'/>](https://f-droid.org/en/packages/com.flipperdevices.app/)
-
-Or get the app from the [Releases Section](https://github.com/flipperdevices/Flipper-Android-App/releases/latest).
 
 ## Module arch
 

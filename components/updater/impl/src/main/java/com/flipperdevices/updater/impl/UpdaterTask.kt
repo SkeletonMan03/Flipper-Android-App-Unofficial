@@ -1,6 +1,5 @@
 package com.flipperdevices.updater.impl
 
-import com.flipperdevices.bridge.connection.feature.getinfo.api.FGetInfoFeatureApi
 import com.flipperdevices.bridge.connection.feature.provider.api.FFeatureProvider
 import com.flipperdevices.bridge.connection.feature.provider.api.getSync
 import com.flipperdevices.bridge.connection.feature.rpc.api.exception.FRpcStorageExistException
@@ -22,12 +21,9 @@ import com.flipperdevices.updater.impl.tasks.FlipperUpdateImageHelper
 import com.flipperdevices.updater.impl.tasks.UploadToFlipperHelper
 import com.flipperdevices.updater.impl.tasks.downloader.UpdateContentDownloader
 import com.flipperdevices.updater.model.OfficialFirmware
-import com.flipperdevices.updater.model.SubGhzProvisioningException
 import com.flipperdevices.updater.model.UpdateContent
 import com.flipperdevices.updater.model.UpdateRequest
 import com.flipperdevices.updater.model.UpdatingState
-import com.flipperdevices.updater.subghz.helpers.SubGhzProvisioningHelper
-import com.flipperdevices.updater.subghz.model.FailedUploadSubGhzException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
@@ -36,7 +32,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
-import java.net.UnknownHostException
 import javax.inject.Inject
 
 private const val DISCONNECT_WAIT_TIMEOUT_MS = 30 * 1000L
@@ -44,7 +39,6 @@ private const val DISCONNECT_WAIT_TIMEOUT_MS = 30 * 1000L
 @Suppress("LongParameterList")
 class UpdaterTask @Inject constructor(
     private val uploadToFlipperHelper: UploadToFlipperHelper,
-    private val subGhzProvisioningHelper: SubGhzProvisioningHelper,
     private val updateContentDownloader: MutableSet<UpdateContentDownloader>,
     private val fapNeedUpdatePopUpHelper: FapNeedUpdatePopUpHelper,
     private val storageProvider: FlipperStorageProvider,
@@ -72,10 +66,6 @@ class UpdaterTask @Inject constructor(
             error { "#startInternal could not get FUpdateFeatureApi" }
             return
         }
-        val fGetInfoFeatureApi = fFeatureProvider.getSync<FGetInfoFeatureApi>() ?: run {
-            error { "#startInternal could not get FGetInfoFeatureApi" }
-            return
-        }
         val fStorageFeatureApi = fFeatureProvider.getSync<FStorageFeatureApi>() ?: run {
             error { "#startInternal could not get FStorageFeatureApi" }
             return
@@ -87,7 +77,6 @@ class UpdaterTask @Inject constructor(
             startInternalUnwrapped(
                 input = input,
                 fFileUploadApi = fFileUploadApi,
-                fGetInfoFeatureApi = fGetInfoFeatureApi,
                 fListingStorageApi = fListingStorageApi,
                 fUpdateFeatureApi = fUpdateFeatureApi,
                 stateListener = {
@@ -108,7 +97,6 @@ class UpdaterTask @Inject constructor(
     @Suppress("LongMethod", "ComplexMethod")
     private suspend fun startInternalUnwrapped(
         input: UpdateRequest,
-        fGetInfoFeatureApi: FGetInfoFeatureApi,
         fFileUploadApi: FFileUploadApi,
         fUpdateFeatureApi: FUpdateFeatureApi,
         fListingStorageApi: FListingStorageApi,
@@ -131,32 +119,6 @@ class UpdaterTask @Inject constructor(
                     stateListener(UpdatingState.FailedCustomUpdate)
                 }
             }
-            return@useTemporaryFolder
-        }
-        try {
-            stateListener(UpdatingState.SubGhzProvisioning)
-            subGhzProvisioningHelper.provideAndUploadSubGhz(
-                fGetInfoFeatureApi = fGetInfoFeatureApi,
-                fFileUploadApi = fFileUploadApi
-            )
-        } catch (e: SubGhzProvisioningException) {
-            error(e) { "Failed receive subghz region" }
-            stateListener(UpdatingState.FailedOutdatedApp)
-            return@useTemporaryFolder
-        } catch (e: FailedUploadSubGhzException) {
-            error(e) { "Failed upload subghz provisioning" }
-            stateListener(UpdatingState.FailedSubGhzProvisioning)
-            return@useTemporaryFolder
-        } catch (e: UnknownHostException) {
-            error(e) { "Failed download subghz information" }
-            stateListener(UpdatingState.FailedDownload)
-            return@useTemporaryFolder
-        } catch (e: CancellationException) {
-            error(e) { "Cancel update" }
-            return@useTemporaryFolder
-        } catch (e: Throwable) {
-            error(e) { "Failed when provide subghz provisioning" }
-            stateListener(UpdatingState.FailedPrepare)
             return@useTemporaryFolder
         }
 

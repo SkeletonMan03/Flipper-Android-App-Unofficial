@@ -32,6 +32,10 @@
     <string name="debug_application_show_remote_controls">Show remote controls</string>
     <string name="debug_application_installall_dev">Install all app</string>
     <string name="debug_broke_session">Broke RPC/BLE session</string>
+    <string name="debug_update_server">Update Server</string>
+    <string name="debug_update_server_flipper">Official</string>
+    <string name="debug_update_server_unleashed">Unleashed</string>
+    <string name="debug_update_server_momentum">Momentum</string>
 
 
     <string name="debug_ignored_unsupported_version_toast">Please restart the application to apply</string>

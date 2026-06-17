@@ -1,5 +1,6 @@
 package com.flipperdevices.updater.card.helpers
 
+import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.deeplink.model.Deeplink
 import com.flipperdevices.updater.card.utils.isGreaterThan
@@ -22,11 +23,16 @@ class UpdateCardHelper(
     private val alwaysShowUpdate: Boolean,
     private val webUpdate: Deeplink.BottomBar.DeviceTab.WebUpdate?,
     private val latestVersionAsync: Deferred<Result<EnumMap<FirmwareChannel, VersionFiles>>>
-) {
+) : LogTagProvider {
+    override val TAG = "UpdateCardHelper"
 
     suspend fun processUpdateCardState(): UpdateCardState {
-        if (isFlashExist == null || firmwareVersion == null) return UpdateCardState.InProgress
-        if (!isFlashExist) return UpdateCardState.Error(UpdateErrorType.NO_SD_CARD)
+        if (isFlashExist == null) {
+            return UpdateCardState.InProgress
+        }
+        if (!isFlashExist) {
+            return UpdateCardState.Error(UpdateErrorType.NO_SD_CARD)
+        }
 
         val latestVersionFromNetworkResult = latestVersionAsync.await()
 
@@ -40,7 +46,13 @@ class UpdateCardHelper(
 
         val latestVersionFromNetwork = latestVersionFromNetworkResult
             .getOrNull()
-            ?.get(updateChannel) ?: return processNoUpdate()
+            ?.get(updateChannel) ?: run {
+            return if (firmwareVersion != null) processNoUpdate() else UpdateCardState.InProgress
+        }
+
+        if (firmwareVersion == null) {
+            return processUpdateAvailable(latestVersionFromNetwork)
+        }
 
         val isUpdateAvailable = alwaysShowUpdate ||
             latestVersionFromNetwork.version.isGreaterThan(firmwareVersion) ?: true ||
@@ -89,12 +101,16 @@ class UpdateCardHelper(
     private fun processUpdateAvailable(latestVersionFromNetwork: VersionFiles): UpdateCardState {
         return UpdateCardState.UpdateAvailable(
             update = UpdateRequest(
-                updateFrom = checkNotNull(firmwareVersion),
+                updateFrom = firmwareVersion ?: FirmwareVersion(
+                    channel = FirmwareChannel.UNKNOWN,
+                    version = "unknown",
+                    buildDate = null
+                ),
                 updateTo = latestVersionFromNetwork.version,
                 changelog = latestVersionFromNetwork.changelog,
                 content = OfficialFirmware(latestVersionFromNetwork.updaterFile)
             ),
-            isOtherChannel = latestVersionFromNetwork.version.channel
+            isOtherChannel = firmwareVersion == null || latestVersionFromNetwork.version.channel
                 != firmwareVersion.channel
         )
     }

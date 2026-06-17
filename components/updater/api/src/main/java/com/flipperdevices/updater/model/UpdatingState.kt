@@ -14,14 +14,10 @@ sealed class UpdatingState(
     object NotStarted : UpdatingState(true)
 
     object FailedInternalStorage : UpdatingState(true)
-    object FailedSubGhzProvisioning : UpdatingState(true)
-    object FailedOutdatedApp : UpdatingState(true)
     object FailedDownload : UpdatingState(true)
     object FailedPrepare : UpdatingState(true)
     object FailedUpload : UpdatingState(true)
     object FailedCustomUpdate : UpdatingState(true)
-
-    object SubGhzProvisioning : UpdatingState(false)
 
     data class DownloadingFromNetwork(
         val percent: Float

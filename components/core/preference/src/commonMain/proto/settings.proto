@@ -41,6 +41,12 @@ enum FileManagerSort {
   SIZE = 1;
 }
 
+enum UpdateRequestServer {
+  FLIPPER = 0;
+  UNLEASHED = 1;
+  MOMENTUM = 2;
+}
+
 message Settings {
   reserved 7; // Already unused tags
   reserved 12; // Already unused  first_synchronization_passed
@@ -51,6 +57,7 @@ message Settings {
   reserved 20; // Already unused faphub_new_switch
   reserved 21; // Already unused application_catalog
   reserved 24; // Already unused use_new_infrared
+  reserved 15; // Already unused ignore_subghz_provisioning_on_zero_region
 
   bool used_foreground_service = 2;
   bool enabled_debug_settings = 3;
@@ -62,7 +69,6 @@ message Settings {
   string uuid = 11;
   SelectedTheme selected_theme = 13;
   bool expert_mode = 14;
-  bool ignore_subghz_provisioning_on_zero_region = 15;
   bool skip_auto_sync_in_debug = 17;
   bool self_updater_debug = 22;
   bool use_dev_catalog = 23;
@@ -76,4 +82,5 @@ message Settings {
   bool show_hidden_files_on_flipper = 32;
   bool disabled_vibration = 33;
   bool infrared_remotes_tab_shown = 34;
+  UpdateRequestServer update_request_server = 35;
 }

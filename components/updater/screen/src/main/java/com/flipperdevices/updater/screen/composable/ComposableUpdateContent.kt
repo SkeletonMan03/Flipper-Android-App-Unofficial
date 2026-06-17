@@ -59,13 +59,6 @@ fun ComposableUpdateContent(
             iconId = R.drawable.ic_globe,
             percent = updaterScreenState.percent
         )
-        is UpdaterScreenState.SubGhzProvisioning -> AndroidFlipperProgressIndicator(
-            modifier = localModifier,
-            accentColor = LocalPallet.current.updateProgressGreen,
-            secondColor = LocalPallet.current.updateProgressBackgroundGreen,
-            iconId = R.drawable.ic_globe,
-            percent = null
-        )
         is UpdaterScreenState.UploadOnFlipper -> AndroidFlipperProgressIndicator(
             modifier = localModifier,
             accentColor = LocalPallet.current.accentSecond,
@@ -88,10 +81,8 @@ fun ComposableUpdateContent(
             percent = null
         )
         is UpdaterScreenState.Failed -> when (updaterScreenState.failedReason) {
-            FailedReason.FAILED_SUB_GHZ_PROVISIONING,
             FailedReason.UPLOAD_ON_FLIPPER -> ComposableFailedUploadContent()
             FailedReason.DOWNLOAD_FROM_NETWORK -> ComposableFailedDownloadContent(onRetry)
-            FailedReason.OUTDATED_APP -> ComposableOutdatedApp()
             FailedReason.FAILED_INT_STORAGE -> ComposableInternalFlashFailed()
             FailedReason.FAILED_INTERNAL_UPDATE -> ComposableInternalUpdateFailed()
         }
@@ -124,7 +115,6 @@ private fun DescriptionUpdateText(
         is UpdaterScreenState.CancelingSynchronization -> R.string.update_stage_sync_canceling_desc
         UpdaterScreenState.CancelingUpdate -> R.string.update_stage_update_canceling_desc
         is UpdaterScreenState.DownloadingFromNetwork -> R.string.update_stage_downloading_desc
-        is UpdaterScreenState.SubGhzProvisioning -> R.string.update_stage_subghz_desc
         UpdaterScreenState.Finish -> R.string.update_stage_update_canceling_desc
         UpdaterScreenState.NotStarted -> R.string.update_stage_starting_desc
         UpdaterScreenState.Rebooting -> R.string.update_stage_rebooting_desc

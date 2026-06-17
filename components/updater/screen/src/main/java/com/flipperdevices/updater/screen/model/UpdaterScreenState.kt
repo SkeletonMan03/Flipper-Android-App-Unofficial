@@ -11,10 +11,6 @@ sealed class UpdaterScreenState(
         updateRequest: UpdateRequest?
     ) : UpdaterScreenState(updateRequest)
 
-    class SubGhzProvisioning(
-        updateRequest: UpdateRequest?
-    ) : UpdaterScreenState(updateRequest)
-
     class DownloadingFromNetwork(
         updateRequest: UpdateRequest?,
         val percent: Float

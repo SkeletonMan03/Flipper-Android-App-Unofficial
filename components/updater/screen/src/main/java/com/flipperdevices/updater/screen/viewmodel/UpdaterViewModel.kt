@@ -149,24 +149,12 @@ class UpdaterViewModel @Inject constructor(
                         UpdaterScreenState.Rebooting
                     }
 
-                UpdatingState.FailedOutdatedApp -> UpdaterScreenState.Failed(
-                    FailedReason.OUTDATED_APP
-                )
-
-                UpdatingState.FailedSubGhzProvisioning -> UpdaterScreenState.Failed(
-                    FailedReason.FAILED_SUB_GHZ_PROVISIONING
-                )
-
                 UpdatingState.FailedInternalStorage -> UpdaterScreenState.Failed(
                     FailedReason.FAILED_INT_STORAGE
                 )
 
                 UpdatingState.FailedCustomUpdate -> UpdaterScreenState.Failed(
                     FailedReason.FAILED_INTERNAL_UPDATE
-                )
-
-                UpdatingState.SubGhzProvisioning -> UpdaterScreenState.SubGhzProvisioning(
-                    updateRequest = updateRequest
                 )
             }
             verbose {

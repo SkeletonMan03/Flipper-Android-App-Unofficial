@@ -6,6 +6,7 @@ import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.preference.pb.SelectedTheme
 import com.flipperdevices.core.preference.pb.Settings
+import com.flipperdevices.core.preference.pb.UpdateRequestServer
 import com.flipperdevices.core.share.ShareHelper
 import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
 import com.flipperdevices.settings.impl.R
@@ -106,6 +107,16 @@ class SettingsViewModel @Inject constructor(
             dataStoreSettings.updateData {
                 it.copy(
                     disabled_vibration = !vibration
+                )
+            }
+        }
+    }
+
+    fun onChangeUpdateRequestServer(server: UpdateRequestServer) {
+        viewModelScope.launch {
+            dataStoreSettings.updateData {
+                it.copy(
+                    update_request_server = server
                 )
             }
         }

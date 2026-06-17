@@ -50,7 +50,6 @@ class DebugViewModel @Inject constructor(
             DebugSettingSwitch.IgnoreUpdaterVersion -> onSwitchIgnoreUpdaterVersion(flag)
             DebugSettingSwitch.SelfUpdaterDebug -> onSwitchSelfUpdaterDebug(flag)
             DebugSettingSwitch.SkipAutoSync -> onSwitchSkipAutoSync(flag)
-            DebugSettingSwitch.SkipProvisioning -> onSwitchIgnoreSubGhzProvisioning(flag)
         }
     }
 
@@ -79,16 +78,6 @@ class DebugViewModel @Inject constructor(
             settingsDataStore.updateData {
                 it.copy(
                     always_update = alwaysUpdate
-                )
-            }
-        }
-    }
-
-    private fun onSwitchIgnoreSubGhzProvisioning(ignoreSubGhzProvisioningOnZeroRegion: Boolean) {
-        viewModelScope.launch {
-            settingsDataStore.updateData {
-                it.copy(
-                    ignore_subghz_provisioning_on_zero_region = ignoreSubGhzProvisioningOnZeroRegion
                 )
             }
         }

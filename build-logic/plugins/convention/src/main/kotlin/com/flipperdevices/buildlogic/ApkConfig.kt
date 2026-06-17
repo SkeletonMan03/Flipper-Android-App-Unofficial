@@ -43,10 +43,10 @@ object ApkConfig {
         }
 
     val Project.IS_METRIC_ENABLED
-        get() = prop("is_metric_enabled", true).toBoolean()
+        get() = false
 
     val Project.IS_SENTRY_ENABLED
-        get() = prop("is_metric_enabled", true).toBoolean()
+        get() = false
 
     val Project.CURRENT_FLAVOR_TYPE: FlavorType
         get() {

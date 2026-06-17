@@ -74,7 +74,8 @@ fun ComposableSettings(
                     settings = settings,
                     onSwitchDebug = settingsViewModel::onSwitchDebug,
                     onAction = onDebugAction,
-                    onDebugSettingSwitch = debugViewModel::onSwitch
+                    onDebugSettingSwitch = debugViewModel::onSwitch,
+                    onChangeUpdateRequestServer = settingsViewModel::onChangeUpdateRequestServer
                 )
             }
             ExperimentalCategory(

@@ -9,9 +9,10 @@ import com.flipperdevices.bridge.connection.feature.storage.api.FStorageFeatureA
 import com.flipperdevices.core.ktx.jre.launchWithLock
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
-import com.flipperdevices.core.log.verbose
+import com.flipperdevices.core.log.info
 import com.flipperdevices.core.preference.pb.SelectedChannel
 import com.flipperdevices.core.preference.pb.Settings
+import com.flipperdevices.core.preference.pb.UpdateRequestServer
 import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
 import com.flipperdevices.deeplink.model.Deeplink
 import com.flipperdevices.updater.api.DownloaderApi
@@ -29,13 +30,17 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+
+private const val MAX_RETRY_COUNT = 3L
 
 @Suppress("LongParameterList")
 class UpdateCardViewModel @AssistedInject constructor(
@@ -56,6 +61,7 @@ class UpdateCardViewModel @AssistedInject constructor(
     private val updateChanelFlow = MutableStateFlow<FirmwareChannel?>(null)
 
     private val deeplinkFlow = MutableStateFlow(deeplink)
+    private val settingsStateFlow = MutableStateFlow(Settings())
 
     private var cardStateJob: Job? = null
     private val mutex = Mutex()
@@ -63,12 +69,26 @@ class UpdateCardViewModel @AssistedInject constructor(
     init {
         viewModelScope.launch {
             dataStoreSettings.data.collectLatest {
+                settingsStateFlow.emit(it)
                 updateChanelFlow.emit(it.selected_channel.toFirmwareChannel())
             }
         }
     }
 
     fun getUpdateCardState(): StateFlow<UpdateCardState> = updateCardState
+
+    fun getSettings(): StateFlow<Settings> = settingsStateFlow.asStateFlow()
+
+    fun onSelectServer(server: UpdateRequestServer) {
+        viewModelScope.launch {
+            dataStoreSettings.updateData {
+                it.copy(
+                    update_request_server = server
+                )
+            }
+            refresh()
+        }
+    }
 
     fun onSelectChannel(channel: FirmwareChannel?) {
         viewModelScope.launch {
@@ -89,18 +109,20 @@ class UpdateCardViewModel @AssistedInject constructor(
     }
 
     fun refresh() {
-        launchWithLock(mutex, viewModelScope, "retry") {
-            // in this case we get heavy information from fw server and flipper
-            // that's why we set state in progress
-            updateCardState.emit(UpdateCardState.InProgress)
-            cardStateJob?.cancelAndJoin()
-            storageExistHelper.invalidate(viewModelScope, force = true)
-            invalidateUnsafe(
-                fStorageFeatureApi = fFeatureProvider.getSync<FStorageFeatureApi>() ?: run {
-                    error { "#refresh could not get FStorageFeatureApi" }
-                    return@launchWithLock
-                }
-            )
+        viewModelScope.launch {
+            launchWithLock(mutex, viewModelScope, "retry") {
+                // in this case we get heavy information from fw server and flipper
+                // that's why we set state in progress
+                updateCardState.emit(UpdateCardState.InProgress)
+                cardStateJob?.cancelAndJoin()
+                storageExistHelper.invalidate(viewModelScope, force = true)
+                invalidateUnsafe(
+                    fStorageFeatureApi = fFeatureProvider.getSync<FStorageFeatureApi>() ?: run {
+                        error { "#refresh could not get FStorageFeatureApi" }
+                        return@launchWithLock
+                    }
+                )
+            }
         }
     }
 
@@ -112,10 +134,12 @@ class UpdateCardViewModel @AssistedInject constructor(
                     cardStateJob?.cancelAndJoin()
                     cardStateJob = null
                 } else {
-                    launchWithLock(mutex, viewModelScope, "onServiceApiReady") {
-                        invalidateUnsafe(
-                            fStorageFeatureApi = fStorageFeatureStatus.featureApi
-                        )
+                    viewModelScope.launch {
+                        launchWithLock(mutex, viewModelScope, "onServiceApiReady") {
+                            invalidateUnsafe(
+                                fStorageFeatureApi = fStorageFeatureStatus.featureApi
+                            )
+                        }
                     }
                 }
             }.launchIn(viewModelScope)
@@ -130,7 +154,6 @@ class UpdateCardViewModel @AssistedInject constructor(
             storageExistHelper.invalidate(this, force = false)
             val latestVersionAsync = async {
                 val result = runCatching { downloaderApi.getLatestVersion() }
-                verbose { "latestVersionAsyncResult: $result" }
                 return@async result
             }
             combine(
@@ -156,6 +179,9 @@ class UpdateCardViewModel @AssistedInject constructor(
                     deeplink,
                     latestVersionAsync
                 )
+            }.retry(MAX_RETRY_COUNT) {
+                error(it) { "Error in update card flow" }
+                true
             }.collectLatest {
                 val state = it.processUpdateCardState()
                 updateCardState.emit(state)

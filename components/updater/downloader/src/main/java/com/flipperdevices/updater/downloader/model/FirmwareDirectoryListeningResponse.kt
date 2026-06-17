@@ -1,6 +1,5 @@
 package com.flipperdevices.updater.downloader.model
 
-import com.flipperdevices.updater.model.FirmwareChannel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,27 +10,15 @@ internal data class FirmwareDirectoryListeningResponse(
 )
 
 @Serializable
-internal enum class FirmwareChannelEnum(val original: FirmwareChannel) {
-    @SerialName("development")
-    DEV(FirmwareChannel.DEV),
-
-    @SerialName("release")
-    RELEASE(FirmwareChannel.RELEASE),
-
-    @SerialName("release-candidate")
-    RELEASE_CANDIDATE(FirmwareChannel.RELEASE_CANDIDATE)
-}
-
-@Serializable
 internal data class FirmwareVersionChannel(
     @SerialName("id")
-    val id: FirmwareChannelEnum? = null,
+    val id: String? = null,
     @SerialName("title")
     val title: String,
     @SerialName("description")
     val description: String,
     @SerialName("versions")
-    val versions: List<FirmwareVersion>
+    val versions: List<FirmwareVersion>? = null
 )
 
 @Serializable

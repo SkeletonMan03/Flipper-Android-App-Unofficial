@@ -21,7 +21,6 @@ import com.flipperdevices.updater.model.FirmwareVersion
 import com.flipperdevices.updater.model.UpdateRequest
 import com.flipperdevices.updater.model.UpdatingState
 import com.flipperdevices.updater.model.UpdatingStateWithRequest
-import com.flipperdevices.updater.subghz.helpers.SubGhzProvisioningHelper
 import com.squareup.anvil.annotations.ContributesBinding
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +36,6 @@ import javax.inject.Singleton
 @ContributesBinding(AppGraph::class, UpdaterApi::class)
 class UpdaterApiImpl @Inject constructor(
     private val updateContentDownloader: MutableSet<UpdateContentDownloader>,
-    private val subGhzProvisioningHelper: SubGhzProvisioningHelper,
     private val uploadToFlipperHelper: UploadToFlipperHelper,
     private val metricApi: MetricApi,
     private val fapNeedUpdatePopUpHelper: FapNeedUpdatePopUpHelper,
@@ -69,7 +67,6 @@ class UpdaterApiImpl @Inject constructor(
          */
         val localActiveTask = UpdaterTask(
             uploadToFlipperHelper = uploadToFlipperHelper,
-            subGhzProvisioningHelper = subGhzProvisioningHelper,
             updateContentDownloader = updateContentDownloader,
             fapNeedUpdatePopUpHelper = fapNeedUpdatePopUpHelper,
             storageProvider = storageProvider,
