@@ -1,6 +1,6 @@
 # Unofficial Flipper Android App
 
-Mobile app to rule all Flipper's family
+Mobile app to rule all Flipper's family.  
 What the Flipper mobile app should have been.
 
 # What's Changed
