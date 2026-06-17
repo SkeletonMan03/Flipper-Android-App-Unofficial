@@ -10,7 +10,7 @@ What the Flipper mobile app should have been.
 * [Unleashed](https://github.com/DarkFlippers/unleashed-firmware)
 * [Momentum](https://github.com/Next-Flip/Momentum-Firmware)
 * Telemetry has been removed
-* Region-free - The subghz update stuff depending for region has been removed
+* Region-free - The subghz update stuff depending on region has been removed
 
 
 ## Download
